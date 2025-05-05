@@ -1,2 +1,5 @@
 # MyGLSurfaceViewApp
 GLSurfaceView Demo for Andoroid
+
+AndroidStudioでEmptyViewsActivityで作ったプロジェクトにGLSurfaceViewを組み込んで単純なキューブジオメトリをタッチ操作で回転させてみた。
+手元ではPixel4aで実機実行した。
