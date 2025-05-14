@@ -6,6 +6,7 @@ import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 
 class MyGLSurfaceView(context: Context) : GLSurfaceView(context) {
+    private val cntx: Context = context
     private val renderer: MyGLRenderer
     private var previousX = 0f
     private var previousY = 0f
@@ -13,7 +14,7 @@ class MyGLSurfaceView(context: Context) : GLSurfaceView(context) {
     init
     {
         setEGLContextClientVersion(2)
-        renderer = MyGLRenderer()
+        renderer = MyGLRenderer(cntx)
         setRenderer(renderer)
         renderMode = RENDERMODE_CONTINUOUSLY
     }

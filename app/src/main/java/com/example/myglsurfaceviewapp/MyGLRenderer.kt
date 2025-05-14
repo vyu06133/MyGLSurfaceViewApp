@@ -1,5 +1,8 @@
 package com.example.myglsurfaceviewapp
 
+import android.content.Context
+import android.content.res.AssetManager
+import java.io.InputStream
 
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
@@ -7,9 +10,10 @@ import android.opengl.Matrix
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MyGLRenderer : GLSurfaceView.Renderer
+class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
 {
-    private lateinit var cube: Cube
+    private val cntx: Context = context
+    private lateinit var earth: Earth
 
     private val mVPMatrix = FloatArray(16)
     private val mProjectionMatrix = FloatArray(16)
@@ -22,7 +26,7 @@ class MyGLRenderer : GLSurfaceView.Renderer
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?)
     {
         GLES20.glClearColor(0f, 0f, 0f, 1f)
-        cube = Cube()
+        earth  = Earth(cntx)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
     }
 
@@ -43,14 +47,16 @@ class MyGLRenderer : GLSurfaceView.Renderer
             0f, 1.0f, 0.0f)
 
         Matrix.setIdentityM(mModelMatrix, 0)
-        Matrix.rotateM(mModelMatrix, 0, angleX, 1f, 0f, 0f)
-        Matrix.rotateM(mModelMatrix, 0, angleY, 0f, 1f, 0f)
+        if(true) {
+            Matrix.rotateM(mModelMatrix, 0, angleX, 1f, 0f, 0f)
+            Matrix.rotateM(mModelMatrix, 0, angleY, 0f, 1f, 0f)
+        }
 
         Matrix.multiplyMM(mVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0)
         val finalMatrix = FloatArray(16)
         Matrix.multiplyMM(finalMatrix, 0, mVPMatrix, 0, mModelMatrix, 0)
 
-        cube.draw(finalMatrix)
+        earth.draw(finalMatrix)
     }
 }
 
