@@ -37,7 +37,7 @@ data class Vector2(var x: Float, var y: Float)
 private val _svgSize = Vector2(0.01f, 0.01f)
 
 data class SvgPath(val points: MutableList<Vector2> = mutableListOf()) {
-	private val _svgSize = Vector2(0.0f, 0.0f)
+//	private val _svgSize = Vector2(0.0f, 0.0f)
 	fun makePoints(text: String):Boolean {
 		val result = mutableListOf<Vector2>()
 		val numbers = mutableListOf<Float>()
@@ -62,18 +62,20 @@ data class SvgPath(val points: MutableList<Vector2> = mutableListOf()) {
 			return false
 		}
 		
-		Log.v("LOAD","svgPath=${_svgSize}")
-		_svgSize.x=1.0f/8000.0f;
-		_svgSize.y=1.0f/3859.0f;
+//		Log.v("makePoints","svgPath=${_svgSize}")
+		var invw = 1.0f / _svgSize.x
+		var invh = 1.0f / _svgSize.y
+		//_svgSize.x=1.0f/8000.0f;
+		//_svgSize.y=1.0f/3859.0f;
 		val pen = Vector2(numbers[0], numbers[1])
 		//Log.v("SvgPathParser", "moveTo: ${pen}")
-		points.add(Vector2(pen.x*_svgSize.x, pen.y*_svgSize.y))
+		points.add(Vector2(pen.x*invw, pen.y*invh))
 		
 		var elem = 0
 		for (i in 2 until numbers.count() - 1 step 2) {
 			pen.x += numbers[i]
 			pen.y += numbers[i + 1]
-			var p=Vector2(pen.x*_svgSize.x, pen.y*_svgSize.y)
+			var p=Vector2(pen.x*invw, pen.y*invh)
 //			Log.v("SvgPathParser", "lineTo: ${p}")
 			points.add(p)
 		}
@@ -95,22 +97,11 @@ class PathOnlySvgSAXHandler : DefaultHandler() {
 				val widthStr = attributes!!.getValue("width")  // "8e3"
 				val heightStr = attributes!!.getValue("height") // "3859"
 				Log.v("svgSize", "width=${widthStr} height=${heightStr}")
-				_svgSize.x = 1.0f/widthStr.toFloat()
-				_svgSize.y = 1.0f/heightStr.toFloat()
+				_svgSize.x = widthStr.toFloat()
+				_svgSize.y = heightStr.toFloat()
+				Log.v("startElement","svgPath=${_svgSize}")
 			}//todo:正常か確認する
 		}
-	}
-	
-	override fun endDocument() {
-		Log.d("SvgSAX", "SVG Document Parsed. Found ${paths.size} path elements.")
-		var pathsCount = paths.count()
-//        for(i in 0 until pathsCount) {
-//           Log.v("Parse", "i=${i} pathsCount=${pathsCount}")
-//            for (j in 0 until paths[i].points.count()) {
-//                paths[i].points[j].x = paths[i].points[j].x * _svgSize.x
-//                paths[i].points[j].y = -(0.5f - paths[i].points[j].y * _svgSize.y)
-//            }
-//        }
 	}
 }
 
