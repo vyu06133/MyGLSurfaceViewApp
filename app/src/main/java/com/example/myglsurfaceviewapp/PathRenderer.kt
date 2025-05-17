@@ -190,15 +190,21 @@ class PathRenderer(
 		end()
 	}
 	
-	fun drawStrip(points:MutableList<Vector2>, r: Float = 1f, g: Float = 1f, b: Float = 1f, a: Float = 1f) {
+	fun drawStrip(points:MutableList<Vector2>, s:Int ) {
 		if (points.size < 2) return // 線を描画するには少なくとも2つの点が必要
 		
+		var S=s
+		if(S<1)S=1
 		begin(GLES20.GL_LINE_STRIP)
-//		begin(GLES20.GL_POINTS)
-		color(r, g, b, a)
-		for (point in points) {
-			vertex(point.x, -(0.5f - point.y))
+		vertex(points[0].x, points[0].y)
+		for (i in S until points.count() - S step S) {
+			if (i > points.count()-1)break;
+			var point = points[i]
+			vertex(point.x, point.y)
 		}
+//		for (point in points) {
+//			vertex(point.x, point.y)
+//		}
 		end()
 	}
 

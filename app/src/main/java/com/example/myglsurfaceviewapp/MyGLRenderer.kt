@@ -25,12 +25,13 @@ class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
 
     var angleX = 0f
     var angleY = 0f
+    var att=0f
 
     override fun onSurfaceCreated(unused: GL10?, config: EGLConfig?)
     {
         GLES20.glClearColor(0f, 0f, 0.64f, 1f)
         earth = World98(cntx)
-        path = PathRenderer(20000)
+        path = PathRenderer(30000)
         immediate = ImmediateDraw()
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
     }
@@ -67,13 +68,14 @@ class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
         immediate.enableLighting(false)
         immediate.enableTexture(false)
 
-        immediate.drawWireCube(50.0f)
+        immediate.drawWireCube(75.0f)
         path.color(1f,0f,1f,1f)
-        path.setRadius(50.0f)
+        path.setRadius(75.0f)
+        Log.v("onDrawFrame", "${att}")
         earth._svgPaths.forEach{
-            path.drawStrip(it.points)
+            path.drawStrip(it.points, att.toInt())
         }
-//        path.drawRectangle(0f,0f,400f,300f)
+        att *= 0.5f
     }
 }
 

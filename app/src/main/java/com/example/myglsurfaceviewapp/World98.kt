@@ -35,9 +35,10 @@ import java.nio.FloatBuffer
 data class Vector2(var x: Float, var y: Float)
 
 private val _svgSize = Vector2(0.01f, 0.01f)
-
+fun Conv(lonlat:Vector2):Vector2 {
+	return Vector2(lonlat.x/_svgSize.x-0.5f, lonlat.y/_svgSize.y)
+}
 data class SvgPath(val points: MutableList<Vector2> = mutableListOf()) {
-//	private val _svgSize = Vector2(0.0f, 0.0f)
 	fun makePoints(text: String):Boolean {
 		val result = mutableListOf<Vector2>()
 		val numbers = mutableListOf<Float>()
@@ -63,21 +64,13 @@ data class SvgPath(val points: MutableList<Vector2> = mutableListOf()) {
 		}
 		
 //		Log.v("makePoints","svgPath=${_svgSize}")
-		var invw = 1.0f / _svgSize.x
-		var invh = 1.0f / _svgSize.y
-		//_svgSize.x=1.0f/8000.0f;
-		//_svgSize.y=1.0f/3859.0f;
 		val pen = Vector2(numbers[0], numbers[1])
-		//Log.v("SvgPathParser", "moveTo: ${pen}")
-		points.add(Vector2(pen.x*invw, pen.y*invh))
+		points.add(Conv(pen))
 		
-		var elem = 0
 		for (i in 2 until numbers.count() - 1 step 2) {
 			pen.x += numbers[i]
 			pen.y += numbers[i + 1]
-			var p=Vector2(pen.x*invw, pen.y*invh)
-//			Log.v("SvgPathParser", "lineTo: ${p}")
-			points.add(p)
+			points.add(Conv(pen))
 		}
 		return true
 	}
@@ -99,8 +92,8 @@ class PathOnlySvgSAXHandler : DefaultHandler() {
 				Log.v("svgSize", "width=${widthStr} height=${heightStr}")
 				_svgSize.x = widthStr.toFloat()
 				_svgSize.y = heightStr.toFloat()
-				Log.v("startElement","svgPath=${_svgSize}")
-			}//todo:正常か確認する
+				//Log.v("startElement","svgPath=${_svgSize}")
+			}
 		}
 	}
 }
