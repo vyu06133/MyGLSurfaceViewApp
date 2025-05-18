@@ -40,7 +40,9 @@ class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
     {
         GLES20.glViewport(0, 0, width, height)
         val ratio = width.toFloat() / height
-        Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 1f, 5000.0f)
+    //    Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1f, 1f, 1f, 5000.0f)
+        Matrix.perspectiveM(mProjectionMatrix, 0, 45.0f, ratio, 1.0f, 5000.0f)
+        
     }
 
     override fun onDrawFrame(unused: GL10?)
@@ -49,7 +51,7 @@ class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
         
         //Log.v("MyGLRenderer", "x=${angleX} y=${angleY}")
         Matrix.setLookAtM(mViewMatrix, 0,
-            0f, 0f, 100f,
+            0f, 0f, 500f,
             0f, 0f, 0f,
             0f, 1.0f, 0.0f)
 
@@ -75,7 +77,7 @@ class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
         earth._svgPaths.forEach{
             path.drawStrip(it.points, att.toInt())
         }
-        att *= 0.5f
+        att *= 0.7f
     }
 }
 

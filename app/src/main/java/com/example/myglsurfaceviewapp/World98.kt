@@ -36,7 +36,7 @@ data class Vector2(var x: Float, var y: Float)
 
 private val _svgSize = Vector2(0.01f, 0.01f)
 fun Conv(lonlat:Vector2):Vector2 {
-	return Vector2(lonlat.x/_svgSize.x-0.5f, lonlat.y/_svgSize.y)
+	return Vector2(lonlat.x/_svgSize.x-0.5f, -lonlat.y/_svgSize.y)
 }
 data class SvgPath(val points: MutableList<Vector2> = mutableListOf()) {
 	fun makePoints(text: String):Boolean {

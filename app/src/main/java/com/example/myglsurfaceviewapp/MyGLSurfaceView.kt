@@ -60,7 +60,7 @@ class MyGLSurfaceView(context: Context) : GLSurfaceView(context) {
                     //     v.translationY += dy
 //                    renderer.angleX+=dy*0.5f
                     renderer.angleY+=dx*0.5f
-                    renderer.att = 100f
+                    renderer.att = 1000f
                     println("パン: dx=$dx, dy=$dy")
                     lastX = event.x
                     lastY = event.y
