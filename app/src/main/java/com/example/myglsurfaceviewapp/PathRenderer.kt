@@ -145,7 +145,8 @@ class PathRenderer(
 			}
 			
             void main() {
-                gl_Position = u_MVPMatrix * vec4(MapOntoSphere(a_Position.y, a_Position.x), 1.0);
+                gl_Position = u_MVPMatrix * vec4(a_Position * u_radius, 0.0, 1.0);
+                //gl_Position = u_MVPMatrix * vec4(MapOntoSphere(a_Position.y, a_Position.x), 1.0);
                 v_Color = a_Color;
             }
         """.trimIndent()
