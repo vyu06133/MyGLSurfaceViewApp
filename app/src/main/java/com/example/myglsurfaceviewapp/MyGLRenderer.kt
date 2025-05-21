@@ -73,7 +73,9 @@ class MyGLRenderer(context: Context) : GLSurfaceView.Renderer
         immediate.drawWireCube(75.0f)
         path.color(1f,0f,1f,1f)
         path.setRadius(75.0f)
-        Log.v("onDrawFrame", "${att}")
+        if(att>1) {
+            Log.v("onDrawFrame", "${att}")
+        }
         earth._svgPaths.forEach{
             path.drawStrip(it.points, att.toInt())
         }

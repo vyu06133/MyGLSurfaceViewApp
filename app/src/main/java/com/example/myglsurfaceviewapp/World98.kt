@@ -68,7 +68,7 @@ data class SvgPath(val points: MutableList<Vector2> = mutableListOf()) {
 		points.add(Conv(pen))
 		
 		for (i in 2 until numbers.count() - 1 step 2) {
-			pen.x += numbers[i]
+			pen.x += numbers[i + 0]
 			pen.y += numbers[i + 1]
 			points.add(Conv(pen))
 		}

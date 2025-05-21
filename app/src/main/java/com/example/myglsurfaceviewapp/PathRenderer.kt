@@ -133,20 +133,20 @@ class PathRenderer(
             attribute vec4 a_Color;
             varying vec4 v_Color;
 
-			vec3 MapOntoSphere(float lon, float lat)
+			vec3 MapOntoSphere(float lat, float lon)
 			{
-				float phi = (lat * 180.0f) * 3.14f / 180.0f;
-				float lambda = (lon * 360.0f) * 3.14f / 180.0f;
+		        float phi = (lat * 180.0f - 90.0f) * 3.14f / 180.0f;   // 緯度 φ
+                float lambda = (lon * 360.0f - 180.0f) * 3.14f / 180.0f; // 経度 λ
 				vec3 v;
-				v.x = u_radius * cos(phi) * cos(lambda);
-				v.y = u_radius * sin(phi);
+				v.x = u_radius * sin(phi);
+				v.y = u_radius * cos(phi) * cos(lambda);
 				v.z = u_radius * cos(phi) * sin(lambda);
 				return v;
 			}
 			
             void main() {
-                gl_Position = u_MVPMatrix * vec4(a_Position * u_radius, 0.0, 1.0);
-                //gl_Position = u_MVPMatrix * vec4(MapOntoSphere(a_Position.y, a_Position.x), 1.0);
+                //gl_Position = u_MVPMatrix * vec4(a_Position * u_radius, 0.0, 1.0);
+                gl_Position = u_MVPMatrix * vec4(MapOntoSphere(a_Position.x, a_Position.y), 1.0);
                 v_Color = a_Color;
             }
         """.trimIndent()
@@ -197,11 +197,11 @@ class PathRenderer(
 		var S=s
 		if(S<1)S=1
 		begin(GLES20.GL_LINE_STRIP)
-		vertex(points[0].x, points[0].y)
+		vertex(points[0].x-0.5f, points[0].y)
 		for (i in S until points.count() - S step S) {
 			if (i > points.count()-1)break;
 			var point = points[i]
-			vertex(point.x, point.y)
+			vertex(point.x-0.5f, point.y)
 		}
 //		for (point in points) {
 //			vertex(point.x, point.y)
