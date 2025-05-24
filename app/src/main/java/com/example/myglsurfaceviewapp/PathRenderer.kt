@@ -135,8 +135,8 @@ class PathRenderer(
 
 			vec3 MapOntoSphere(float lat, float lon)
 			{
-		        float phi = (lat * 180.0f - 90.0f) * 3.14f / 180.0f;   // 緯度 φ
-                float lambda = (lon * 360.0f - 180.0f) * 3.14f / 180.0f; // 経度 λ
+		        float phi = (lat * 180.0 - 90.0) * 3.14159 / 180.0;   // 緯度 φ
+                float lambda = (lon * 360.0 - 180.0) * 3.14159 / 180.0; // 経度 λ
 				vec3 v;
 				v.x = u_radius * sin(phi);
 				v.y = u_radius * cos(phi) * cos(lambda);
@@ -161,7 +161,17 @@ class PathRenderer(
         """.trimIndent()
 		
 		val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
+		if (vertexShader == 0) {
+			Log.e("VertexShader", "Failed to load shaders")
+			program = 0
+			throw RuntimeException("Shader compilation failed!")
+		}
 		val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
+		if (fragmentShader == 0) {
+			Log.e("FragmentShader", "Failed to load shaders")
+			program = 0
+			throw RuntimeException("Shader compilation failed!")
+		}
 		
 		program = GLES20.glCreateProgram().also {
 			GLES20.glAttachShader(it, vertexShader)
@@ -179,9 +189,20 @@ class PathRenderer(
 		return GLES20.glCreateShader(type).also { shader ->
 			GLES20.glShaderSource(shader, code)
 			GLES20.glCompileShader(shader)
+			
+			// コンパイルステータスをチェック
+			val compiled = IntArray(1)
+			GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0)
+			if (compiled[0] == 0) {
+				// コンパイルに失敗した場合、エラーログを出力
+				Log.e("loadShader", "Failed to compile shader of type $type:")
+				Log.e("loadShader", GLES20.glGetShaderInfoLog(shader))
+				GLES20.glDeleteShader(shader)
+				// ここでエラーを投げるか、適切なエラー処理を行う
+			}
 		}
 	}
-	
+
 	fun drawRectangle(x: Float, y: Float, width: Float, height: Float) {
 		begin(GLES20.GL_TRIANGLE_STRIP)
 		vertex(x, y)

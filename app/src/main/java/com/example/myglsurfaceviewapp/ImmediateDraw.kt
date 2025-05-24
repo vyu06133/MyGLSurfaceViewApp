@@ -215,10 +215,10 @@ class ImmediateDraw(
             void main() {
                 vec3 norm = normalize(v_Normal);
                 
-                float diff = 1.0f;
+                float diff = 1.0;
                 vec3 reflectDir;
                 vec3 viewDir;
-				float spec = 0.0f;
+				float spec = 0.0;
 				if(u_EnableLighting) {
 					vec3 lightDir = normalize(u_LightDir);
 	
